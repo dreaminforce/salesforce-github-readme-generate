@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Salesforce README Profile Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="aurora"></div>
+    <div class="page">
+      <header class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">GitHub Profile Builder</p>
+          <h1>Salesforce README Generator</h1>
+          <p class="subtitle">
+            Craft a standout Salesforce-focused GitHub profile in minutes. Pick clouds, certs, highlights, and export a
+            polished `README.md`.
+          </p>
+        </div>
+        <div class="hero-badges">
+          <div class="badge">Live Preview</div>
+          <div class="badge">Copy & Download</div>
+          <div class="badge">Salesforce-Ready</div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <form id="profileForm" autocomplete="off">
+            <div class="chip-actions form-actions">
+              <button type="button" id="demoBtn">Fill Example</button>
+            </div>
+            <div class="section">
+              <h2>Profile</h2>
+              <div class="field-grid">
+                <label class="field">
+                  <span>Name</span>
+                  <input id="name" type="text" placeholder="Jane Doe" />
+                </label>
+                <label class="field">
+                  <span>Headline</span>
+                  <input id="headline" type="text" placeholder="Salesforce Architect | AI + CRM" />
+                </label>
+                <label class="field">
+                  <span>Company</span>
+                  <input id="company" type="text" placeholder="Acme Corp" />
+                </label>
+                <label class="field">
+                  <span>Location</span>
+                  <input id="location" type="text" placeholder="Austin, TX" />
+                </label>
+                <label class="field">
+                  <span>Pronouns</span>
+                  <input id="pronouns" type="text" placeholder="she/her" />
+                </label>
+                <label class="field">
+                  <span>Banner Image URL</span>
+                  <input id="banner" type="url" placeholder="https://.../banner.png" />
+                </label>
+              </div>
+              <label class="field">
+                <span>Bio</span>
+                <textarea id="bio" rows="3" placeholder="Short professional summary"></textarea>
+              </label>
+            </div>
+
+            <div class="section">
+              <h2>Focus</h2>
+              <div class="field-grid">
+                <label class="field">
+                  <span>Currently Building</span>
+                  <input id="current" type="text" placeholder="Agentforce copilots & automations" />
+                </label>
+                <label class="field">
+                  <span>Learning</span>
+                  <input id="learning" type="text" placeholder="Data Cloud, RAG patterns" />
+                </label>
+                <label class="field">
+                  <span>Ask Me About</span>
+                  <input id="ask" type="text" placeholder="Sales Cloud strategy, LWC performance" />
+                </label>
+                <label class="field">
+                  <span>Fun Fact</span>
+                  <input id="fun" type="text" placeholder="I collect vintage Trailhead stickers" />
+                </label>
+              </div>
+              <label class="field">
+                <span>Highlights (one per line)</span>
+                <textarea id="highlights" rows="3" placeholder="Built a 2M user Experience Cloud rollout"></textarea>
+              </label>
+            </div>
+
+            <div class="section">
+              <h2>Salesforce Clouds & Products</h2>
+              <div class="chip-actions">
+                <button type="button" id="selectAllClouds">Select all</button>
+                <button type="button" id="clearClouds">Clear</button>
+              </div>
+              <div id="clouds" class="icon-grid"></div>
+            </div>
+
+            <div class="section">
+              <h2>Certifications</h2>
+              <div class="field-grid">
+                <label class="field">
+                  <span>Search</span>
+                  <input id="certSearch" type="search" placeholder="Find a certification" />
+                </label>
+                <label class="toggle">
+                  <input id="showSelectedCerts" type="checkbox" />
+                  <span>Show selected only</span>
+                </label>
+              </div>
+              <div class="chip-actions">
+                <button type="button" id="selectAllCerts">Select all</button>
+                <button type="button" id="clearCerts">Clear</button>
+              </div>
+              <div id="certs" class="cert-grid"></div>
+            </div>
+
+            <div class="section">
+              <h2>Tech Stack</h2>
+              <label class="field">
+                <span>Technologies (comma or new line)</span>
+                <textarea id="tech" rows="3" placeholder="Apex, LWC, Flow, OmniStudio, MuleSoft"></textarea>
+              </label>
+            </div>
+
+            <div class="section">
+              <h2>Projects</h2>
+              <div class="project-grid">
+                <label class="field">
+                  <span>Project 1</span>
+                  <input id="project1" type="text" placeholder="Agentforce Knowledge Hub" />
+                </label>
+                <label class="field">
+                  <span>Project 1 Link</span>
+                  <input id="project1link" type="url" placeholder="https://github.com/..." />
+                </label>
+                <label class="field">
+                  <span>Project 1 Description</span>
+                  <input id="project1desc" type="text" placeholder="Unified AI search for service agents" />
+                </label>
+
+                <label class="field">
+                  <span>Project 2</span>
+                  <input id="project2" type="text" placeholder="Sales Cloud Forecasting Accelerator" />
+                </label>
+                <label class="field">
+                  <span>Project 2 Link</span>
+                  <input id="project2link" type="url" placeholder="https://github.com/..." />
+                </label>
+                <label class="field">
+                  <span>Project 2 Description</span>
+                  <input id="project2desc" type="text" placeholder="Custom forecasting UX with Einstein insights" />
+                </label>
+
+                <label class="field">
+                  <span>Project 3</span>
+                  <input id="project3" type="text" placeholder="Data Cloud Integration Starter" />
+                </label>
+                <label class="field">
+                  <span>Project 3 Link</span>
+                  <input id="project3link" type="url" placeholder="https://github.com/..." />
+                </label>
+                <label class="field">
+                  <span>Project 3 Description</span>
+                  <input id="project3desc" type="text" placeholder="Reusable mappings for MuleSoft + Data Cloud" />
+                </label>
+              </div>
+            </div>
+
+            <div class="section">
+              <h2>Connect</h2>
+              <div class="field-grid">
+                <label class="field">
+                  <span>Email</span>
+                  <input id="email" type="email" placeholder="hello@example.com" />
+                </label>
+                <label class="field">
+                  <span>Website</span>
+                  <input id="website" type="url" placeholder="https://yourdomain.com" />
+                </label>
+                <label class="field">
+                  <span>LinkedIn</span>
+                  <input id="linkedin" type="url" placeholder="https://linkedin.com/in/..." />
+                </label>
+                <label class="field">
+                  <span>Trailhead URL</span>
+                  <input id="trailhead" type="url" placeholder="https://trailblazer.me/id/..." />
+                </label>
+                <label class="field">
+                  <span>Twitter / X</span>
+                  <input id="twitter" type="url" placeholder="https://x.com/..." />
+                </label>
+                <label class="field">
+                  <span>GitHub Username</span>
+                  <input id="github" type="text" placeholder="githubUser" />
+                </label>
+              </div>
+            </div>
+
+            <div class="section">
+              <h2>Extras</h2>
+              <div class="toggle-grid">
+                <label class="toggle">
+                  <input id="showStats" type="checkbox" checked />
+                  <span>Include GitHub Stats</span>
+                </label>
+                <label class="toggle">
+                  <input id="showStreak" type="checkbox" />
+                  <span>Include Streak Card</span>
+                </label>
+                <label class="toggle">
+                  <input id="showTopLangs" type="checkbox" />
+                  <span>Include Top Languages</span>
+                </label>
+                <label class="toggle">
+                  <input id="showQuote" type="checkbox" />
+                  <span>Add Signature Quote</span>
+                </label>
+              </div>
+              <label class="field">
+                <span>Signature Quote</span>
+                <input id="quote" type="text" placeholder="Build once, scale everywhere." />
+              </label>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel output-panel">
+          <div class="output-header">
+            <h2>README.md</h2>
+            <div class="output-actions">
+              <button type="button" id="previewBtn" class="ghost" aria-pressed="false">
+                Show Preview
+              </button>
+              <button type="button" id="copyBtn">Copy</button>
+              <button type="button" id="downloadBtn">Download</button>
+              <button type="button" id="resetBtn" class="ghost">Reset</button>
+            </div>
+          </div>
+          <p class="output-note">
+            Output is GitHub-flavored Markdown with HTML for icon grids. Paste into your profile README or commit as
+            `README.md` in a GitHub Pages repo.
+          </p>
+          <div class="output-body">
+            <textarea id="output" spellcheck="false" readonly></textarea>
+            <div class="preview-block" id="previewBlock">
+              <h3>Live Preview</h3>
+              <div id="preview" class="preview"></div>
+            </div>
+          </div>
+          <p id="status" class="status"></p>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
