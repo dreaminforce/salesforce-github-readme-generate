@@ -408,11 +408,27 @@ const rawCerts = [
   },
 ];
 
+const rawTechStack = [
+  "Apex",
+  "Lightning Web Components (LWC)",
+  "Lightning Design System (SLDS)",
+  "Flow Builder",
+  "OmniStudio",
+  "Data Cloud",
+  "Agentforce",
+  "MuleSoft Anypoint",
+  "Tableau",
+  "Slack",
+  "Salesforce CLI",
+  "DevOps Center",
+];
+
 const form = document.getElementById("profileForm");
 const output = document.getElementById("output");
 const status = document.getElementById("status");
 const cloudsContainer = document.getElementById("clouds");
 const certsContainer = document.getElementById("certs");
+const techStackContainer = document.getElementById("techStack");
 const certSearch = document.getElementById("certSearch");
 const showSelectedCerts = document.getElementById("showSelectedCerts");
 const preview = document.getElementById("preview");
@@ -426,6 +442,9 @@ const selectAllClouds = document.getElementById("selectAllClouds");
 const clearClouds = document.getElementById("clearClouds");
 const selectAllCerts = document.getElementById("selectAllCerts");
 const clearCerts = document.getElementById("clearCerts");
+const selectAllTech = document.getElementById("selectAllTech");
+const clearTech = document.getElementById("clearTech");
+const customTech = document.getElementById("customTech");
 
 const slugify = (value) =>
   value
@@ -441,12 +460,26 @@ const certs = rawCerts.map((item, index) => ({
   ...item,
   id: `${slugify(item.name)}-${index}`,
 }));
+const techStack = rawTechStack.map((name, index) => ({
+  name,
+  id: `${slugify(name)}-${index}`,
+}));
 
 const normalizeUrl = (value) => {
   if (!value) return "";
   if (/^(https?:\/\/|mailto:)/i.test(value)) return value;
   return `https://${value}`;
 };
+
+const LINKEDIN_ICON_URL = "https://img.icons8.com/?size=100&id=8808&format=png&color=000000";
+const GITHUB_ICON_URL = "https://img.icons8.com/?size=100&id=12599&format=png&color=000000";
+const BLOG_ICON_URL = "https://img.icons8.com/?size=100&id=GsMdC9NCKCAD&format=png&color=000000";
+const EMAIL_ICON_URL = "https://img.icons8.com/?size=100&id=12623&format=png&color=000000";
+
+const buildIconLink = (href, src, alt, size = 28) =>
+  `<a href="${href}"><img src="${src}" alt="${alt}" width="${size}" height="${size}" /></a>`;
+
+const buildIconRow = (items) => (items.length ? `<p align="left">\n${items.join("\n")}\n</p>` : "");
 
 const getLines = (value) =>
   value
@@ -459,6 +492,16 @@ const getTags = (value) =>
     .split(/[,\n]/)
     .map((tag) => tag.trim())
     .filter(Boolean);
+
+const uniqueTags = (tags) => {
+  const seen = new Set();
+  return tags.filter((tag) => {
+    const key = tag.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
 
 const setStatus = (message) => {
   status.textContent = message;
@@ -477,6 +520,17 @@ const renderOption = (item, type) => {
     <input type="checkbox" id="${type}-${item.id}" data-type="${type}" />
     <span class="icon"><img src="${item.src}" alt="${item.name}" loading="lazy" /></span>
     <span class="text">${item.name}</span>
+  `;
+  return label;
+};
+
+const renderTagOption = (item) => {
+  const label = document.createElement("label");
+  label.className = "tag-choice";
+  label.dataset.name = item.name.toLowerCase();
+  label.innerHTML = `
+    <input type="checkbox" id="tech-${item.id}" data-type="tech" />
+    <span>${item.name}</span>
   `;
   return label;
 };
@@ -518,16 +572,15 @@ const buildReadme = () => {
   const ask = document.getElementById("ask").value.trim();
   const fun = document.getElementById("fun").value.trim();
   const highlights = getLines(document.getElementById("highlights").value);
-  const techTags = getTags(document.getElementById("tech").value);
+  const selectedTech = collectSelected(techStack, "tech").map((item) => item.name);
+  const customTechTags = getTags(customTech.value);
+  const techTags = uniqueTags([...selectedTech, ...customTechTags]);
   const email = document.getElementById("email").value.trim();
-  const website = normalizeUrl(document.getElementById("website").value.trim());
+  const blog = normalizeUrl(document.getElementById("website").value.trim());
   const linkedin = normalizeUrl(document.getElementById("linkedin").value.trim());
+  const github = normalizeUrl(document.getElementById("github").value.trim());
   const trailhead = normalizeUrl(document.getElementById("trailhead").value.trim());
   const twitter = normalizeUrl(document.getElementById("twitter").value.trim());
-  const github = document.getElementById("github").value.trim();
-  const showStats = document.getElementById("showStats").checked;
-  const showStreak = document.getElementById("showStreak").checked;
-  const showTopLangs = document.getElementById("showTopLangs").checked;
   const showQuote = document.getElementById("showQuote").checked;
   const quote = document.getElementById("quote").value.trim();
   const selectedClouds = collectSelected(clouds, "cloud");
@@ -591,32 +644,20 @@ const buildReadme = () => {
     });
   }
 
-  const links = [];
-  if (email) links.push(`[Email](mailto:${email})`);
-  if (website) links.push(`[Website](${website})`);
-  if (linkedin) links.push(`[LinkedIn](${linkedin})`);
-  if (trailhead) links.push(`[Trailhead](${trailhead})`);
-  if (twitter) links.push(`[Twitter/X](${twitter})`);
+  const iconLinks = [];
+  if (email) iconLinks.push(buildIconLink(`mailto:${email}`, EMAIL_ICON_URL, "Email"));
+  if (blog) iconLinks.push(buildIconLink(blog, BLOG_ICON_URL, "Blog"));
+  if (linkedin) iconLinks.push(buildIconLink(linkedin, LINKEDIN_ICON_URL, "LinkedIn"));
+  if (github) iconLinks.push(buildIconLink(github, GITHUB_ICON_URL, "GitHub"));
 
-  if (links.length) {
-    lines.push("", "## Connect", "", links.join(" · "));
-  }
+  const textLinks = [];
+  if (trailhead) textLinks.push(`[Trailhead](${trailhead})`);
+  if (twitter) textLinks.push(`[Twitter/X](${twitter})`);
 
-  if (github && (showStats || showStreak || showTopLangs)) {
-    lines.push("", "## GitHub Stats", "");
-    if (showStats) {
-      lines.push(
-        `![GitHub stats](https://github-readme-stats.vercel.app/api?username=${github}&show_icons=true&rank_icon=github)`
-      );
-    }
-    if (showStreak) {
-      lines.push(`![GitHub Streak](https://streak-stats.demolab.com?user=${github})`);
-    }
-    if (showTopLangs) {
-      lines.push(
-        `![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=${github}&layout=compact)`
-      );
-    }
+  if (iconLinks.length || textLinks.length) {
+    lines.push("", "## Connect", "");
+    if (iconLinks.length) lines.push(buildIconRow(iconLinks));
+    if (textLinks.length) lines.push(textLinks.join(" · "));
   }
 
   if (showQuote && quote) {
@@ -643,7 +684,7 @@ const renderPreview = () => {
 };
 
 const updateSelectionStates = () => {
-  document.querySelectorAll(".icon-choice").forEach((label) => {
+  document.querySelectorAll(".icon-choice, .tag-choice").forEach((label) => {
     const input = label.querySelector("input");
     label.classList.toggle("is-selected", input?.checked === true);
   });
@@ -704,8 +745,10 @@ const resetForm = () => {
   form.reset();
   setAll(cloudsContainer, false, false);
   setAll(certsContainer, false, false);
+  setAll(techStackContainer, false, false);
   certSearch.value = "";
   showSelectedCerts.checked = false;
+  customTech.value = "";
   updateOutput();
   setStatus("Form reset.");
 };
@@ -720,7 +763,7 @@ const togglePreview = () => {
 
 const setSelectedByNames = (container, names) => {
   const targets = new Set(names.map((name) => name.toLowerCase()));
-  container.querySelectorAll(".icon-choice").forEach((label) => {
+  container.querySelectorAll(".icon-choice, .tag-choice").forEach((label) => {
     const input = label.querySelector("input");
     input.checked = targets.has(label.dataset.name);
   });
@@ -742,8 +785,6 @@ const fillDemo = () => {
   document.getElementById("fun").value = "I turn Trailhead quests into team learning challenges";
   document.getElementById("highlights").value =
     "Led a 3-region Sales Cloud rollout for 2,000+ users\\nDelivered Einstein-powered service deflection flows\\nBuilt a reusable Data Cloud ingestion toolkit";
-  document.getElementById("tech").value =
-    "Apex, LWC, Flow, OmniStudio, Data Cloud, MuleSoft, Tableau, Slack, GitHub Actions";
   document.getElementById("project1").value = "Agentforce Success Desk";
   document.getElementById("project1link").value = "https://github.com/example/agentforce-success-desk";
   document.getElementById("project1desc").value = "AI-assisted knowledge routing for service teams";
@@ -756,14 +797,11 @@ const fillDemo = () => {
   document.getElementById("email").value = "maya.chen@nimbuscx.dev";
   document.getElementById("website").value = "https://nimbuscx.dev";
   document.getElementById("linkedin").value = "https://linkedin.com/in/mayachen";
-  document.getElementById("trailhead").value = "https://trailblazer.me/id/mayachen";
-  document.getElementById("twitter").value = "https://x.com/mayachencx";
-  document.getElementById("github").value = "mayachen-sf";
-  document.getElementById("showStats").checked = true;
-  document.getElementById("showStreak").checked = true;
-  document.getElementById("showTopLangs").checked = true;
-  document.getElementById("showQuote").checked = true;
-  document.getElementById("quote").value = "Design with intent, automate with care.";
+  document.getElementById("github").value = "https://github.com/mayachen";
+  document.getElementById("trailhead").value = "";
+  document.getElementById("twitter").value = "";
+  document.getElementById("showQuote").checked = false;
+  document.getElementById("quote").value = "";
 
   setSelectedByNames(cloudsContainer, [
     "Einstein AI",
@@ -785,6 +823,21 @@ const fillDemo = () => {
     "Salesforce Certified JavaScript Developer",
   ]);
 
+  setSelectedByNames(techStackContainer, [
+    "Apex",
+    "Lightning Web Components (LWC)",
+    "Flow Builder",
+    "OmniStudio",
+    "Data Cloud",
+    "Agentforce",
+    "MuleSoft Anypoint",
+    "Tableau",
+    "Slack",
+    "Salesforce CLI",
+  ]);
+
+  customTech.value = "GitHub Actions";
+
   certSearch.value = "";
   showSelectedCerts.checked = false;
   updateOutput();
@@ -793,9 +846,11 @@ const fillDemo = () => {
 
 clouds.forEach((item) => cloudsContainer.appendChild(renderOption(item, "cloud")));
 certs.forEach((item) => certsContainer.appendChild(renderOption(item, "cert")));
+techStack.forEach((item) => techStackContainer.appendChild(renderTagOption(item)));
 
 setAll(cloudsContainer, false, false);
 setAll(certsContainer, false, false);
+setAll(techStackContainer, false, false);
 
 form.addEventListener("input", updateOutput);
 certSearch.addEventListener("input", filterCerts);
@@ -809,5 +864,7 @@ selectAllClouds.addEventListener("click", () => setAll(cloudsContainer, true));
 clearClouds.addEventListener("click", () => setAll(cloudsContainer, false));
 selectAllCerts.addEventListener("click", () => setAll(certsContainer, true));
 clearCerts.addEventListener("click", () => setAll(certsContainer, false));
+selectAllTech.addEventListener("click", () => setAll(techStackContainer, true));
+clearTech.addEventListener("click", () => setAll(techStackContainer, false));
 
 updateOutput();

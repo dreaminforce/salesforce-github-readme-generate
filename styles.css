@@ -148,8 +148,23 @@ h2 {
 
 .project-grid {
   display: grid;
+  gap: 16px;
+}
+
+.project-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 16, 23, 0.45);
+  box-shadow: 0 12px 30px rgba(4, 10, 18, 0.25);
+}
+
+.project-row {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 
 .toggle-grid {
@@ -173,6 +188,13 @@ h2 {
   height: 16px;
 }
 
+.section-note {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 6px 0 12px;
+}
+
 .icon-grid,
 .cert-grid {
   display: grid;
@@ -186,6 +208,70 @@ h2 {
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(6, 16, 23, 0.35);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+  max-height: 300px;
+  overflow: auto;
+  padding: 12px;
+  padding-right: 6px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(6, 16, 23, 0.35);
+}
+
+.tag-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 18, 26, 0.7);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tag-choice:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 210, 200, 0.4);
+  box-shadow: 0 12px 24px rgba(0, 210, 200, 0.12);
+}
+
+.tag-choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tag-choice.is-selected {
+  border-color: rgba(0, 210, 200, 0.8);
+  box-shadow: 0 12px 24px rgba(0, 210, 200, 0.2);
+}
+
+.tag-choice.is-selected::after {
+  content: "✓";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #041217;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: grid;
+  place-items: center;
 }
 
 .cert-grid {
