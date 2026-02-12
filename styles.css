@@ -67,14 +67,14 @@ body {
 
 .hero-link {
   margin-left: 12px;
-  color: var(--text-primary);
+  color: var(--accent-2);
   letter-spacing: 0.08em;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .hero-link:hover {
-  color: var(--accent-2);
+  color: var(--text-primary);
 }
 
 .subtitle {
